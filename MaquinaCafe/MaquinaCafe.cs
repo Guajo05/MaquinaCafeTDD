@@ -3,40 +3,56 @@ using System.Collections.Generic;
 
 namespace MaquinaCafe
 {
+    public record Bebida(string Nombre, int Precio, int Stock);
+
     public class MaquinaCafe
     {
-        public int Saldo { get; private set; }
+        private int _saldo;
+        private readonly Dictionary<string, Bebida> _menu;
 
-        private readonly Dictionary<string, int> _menu = new()
+        public int Saldo => _saldo;
+
+        public MaquinaCafe()
         {
-            { "Cafe", 100 },
-            { "Te", 75 },
-            { "Agua", 50 }
-        };
+            _menu = new()
+            {
+                ["Cafe"] = new Bebida("Cafe", 100, 10),
+                ["Te"] = new Bebida("Te", 75, 10),
+                ["Agua"] = new Bebida("Agua", 50, 10)
+            };
+        }
 
-        public void InsertarMoneda(int monto) => Saldo += monto;
+        public void InsertarMoneda(int monto) => _saldo += monto;
 
-        public bool SeleccionarBebida(string bebida)
+        public bool SeleccionarBebida(string nombre)
         {
-            if (!_menu.ContainsKey(bebida))
-                throw new ArgumentException("No existe");
+            var bebida = ObtenerBebida(nombre);
 
-            if (Saldo < _menu[bebida])
+            if (_saldo < bebida.Precio || bebida.Stock == 0)
                 return false;
 
-            Saldo -= _menu[bebida];
+            _saldo -= bebida.Precio;
+            // Actualizar el stock reemplazando la bebida en el diccionario
+            _menu[nombre] = bebida with { Stock = bebida.Stock - 1 };
             return true;
+        }
+
+        private Bebida ObtenerBebida(string nombre)
+        {
+            if (_menu.TryGetValue(nombre, out var bebida))
+                return bebida;
+            throw new ArgumentException($"No existe {nombre}");
         }
 
         public int ObtenerCambio()
         {
-            var cambio = Saldo;
-            Saldo = 0;
+            var cambio = _saldo;
+            _saldo = 0;
             return cambio;
         }
 
-        public void DevolverMonedas() => Saldo = 0;
+        public void DevolverMonedas() => _saldo = 0;
 
-        public Dictionary<string, int> ObtenerMenu() => _menu;
+        public Dictionary<string, Bebida> ObtenerMenu() => _menu;
     }
 }
