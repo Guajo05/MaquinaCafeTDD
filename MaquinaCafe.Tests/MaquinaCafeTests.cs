@@ -62,9 +62,9 @@ namespace MaquinaCafe.Tests
             var maquina = new MaquinaCafe();
             var menu = maquina.ObtenerMenu();
             Assert.AreEqual(3, menu.Count);
-            Assert.AreEqual(100, menu["Cafe"]);
-            Assert.AreEqual(75, menu["Te"]);
-            Assert.AreEqual(50, menu["Agua"]);
+            Assert.AreEqual(100, menu["Cafe"].Precio);
+            Assert.AreEqual(75, menu["Te"].Precio);
+            Assert.AreEqual(50, menu["Agua"].Precio);
         }
 
         // TC-07
