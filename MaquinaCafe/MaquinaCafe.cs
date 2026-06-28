@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+// CAMBIO REALIZADO: Se agregó el uso de records para
+// la clase Bebida y se reemplazó la actualización del stock en el diccionario
+// por una nueva instancia de Bebida con el stock actualizado.
 
 namespace MaquinaCafe
 {
